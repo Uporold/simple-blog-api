@@ -4,6 +4,7 @@ import {
   Get,
   Post,
   Query,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -11,6 +12,7 @@ import { PostsService } from './posts.service';
 import { PostDto } from './dto/post.dto';
 import { GetPostId } from '../common/get-post-id.decorator';
 import { PostEntity } from './post.entity';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('posts')
 export class PostsController {
@@ -27,6 +29,7 @@ export class PostsController {
   }
 
   @Post()
+  @UseGuards(JwtAuthGuard)
   @UsePipes(new ValidationPipe({ transform: true }))
   createPost(@Body() post: PostDto): Promise<PostEntity> {
     return this.postService.createPost(post);

@@ -1,8 +1,9 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { CommentsService } from './comments.service';
 import { GetPostId } from '../common/get-post-id.decorator';
 import { CommentDto } from './dto/comment.dto';
 import { CommentEntity } from './comment.entity';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('comments')
 export class CommentsController {
@@ -14,6 +15,7 @@ export class CommentsController {
   }
 
   @Post(':postId')
+  @UseGuards(JwtAuthGuard)
   createComment(
     @Body() commentDto: CommentDto,
     @GetPostId() postId: number,

@@ -3,12 +3,14 @@ import {
   Controller,
   Get,
   Post,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { CategoryEntity } from './category.entity';
 import { CategoryDto } from './dto/category.dto';
 import { CategoriesService } from './categories.service';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('categories')
 export class CategoriesController {
@@ -20,6 +22,7 @@ export class CategoriesController {
   }
 
   @Post()
+  @UseGuards(JwtAuthGuard)
   @UsePipes(new ValidationPipe({ transform: true }))
   createCategory(@Body() categoryDto: CategoryDto): Promise<CategoryEntity> {
     return this.categoriesService.createCategory(categoryDto);
