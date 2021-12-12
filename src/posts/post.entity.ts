@@ -6,9 +6,11 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { CategoryEntity } from '../categories/category.entity';
+import { CommentEntity } from '../comments/comment.entity';
 
 @Entity('post')
 export class PostEntity {
@@ -28,6 +30,9 @@ export class PostEntity {
   @JoinTable()
   categories: CategoryEntity[];
   categoryNames: string[];
+
+  @OneToMany((type) => CommentEntity, (comment) => comment.post)
+  comments: CommentEntity[];
 
   @AfterLoad()
   @AfterInsert()
