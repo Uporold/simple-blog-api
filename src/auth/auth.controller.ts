@@ -11,6 +11,7 @@ import { UserDto } from './dto/user.dto';
 import { UserEntity } from './user.entity';
 import { GetUser } from '../common/get-user.decorator';
 import { LocalAuthGuard } from './guards/local-auth.guard';
+import { ApiBody } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
@@ -22,6 +23,7 @@ export class AuthController {
     return this.authService.create(user);
   }
 
+  @ApiBody({ required: true, type: UserDto })
   @Post('login')
   @UseGuards(LocalAuthGuard)
   login(@GetUser() user: UserEntity) {
