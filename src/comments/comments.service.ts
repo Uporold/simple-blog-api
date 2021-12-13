@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CommentEntity } from './comment.entity';
 import { Repository } from 'typeorm';
 import { CommentDto } from './dto/comment.dto';
+import { UserEntity } from '../auth/user.entity';
 
 @Injectable()
 export class CommentsService {
@@ -18,8 +19,13 @@ export class CommentsService {
   async createComment(
     commentDto: CommentDto,
     postId: number,
+    user: UserEntity,
   ): Promise<CommentEntity> {
-    const newComment = this.commentRepository.create({ ...commentDto, postId });
+    const newComment = this.commentRepository.create({
+      ...commentDto,
+      postId,
+      user,
+    });
     await this.commentRepository.save(newComment);
     return newComment;
   }

@@ -14,6 +14,8 @@ import { GetPostId } from '../common/get-post-id.decorator';
 import { PostEntity } from './post.entity';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ApiBearerAuth, ApiParam, ApiQuery } from '@nestjs/swagger';
+import { GetUser } from '../common/get-user.decorator';
+import { UserEntity } from '../auth/user.entity';
 
 @Controller('posts')
 export class PostsController {
@@ -35,7 +37,10 @@ export class PostsController {
   @UseGuards(JwtAuthGuard)
   @UsePipes(new ValidationPipe({ transform: true }))
   @ApiBearerAuth('jwt')
-  createPost(@Body() post: PostDto): Promise<PostEntity> {
-    return this.postService.createPost(post);
+  createPost(
+    @GetUser() user: UserEntity,
+    @Body() post: PostDto,
+  ): Promise<PostEntity> {
+    return this.postService.createPost(post, user);
   }
 }

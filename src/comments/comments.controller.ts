@@ -5,6 +5,8 @@ import { CommentDto } from './dto/comment.dto';
 import { CommentEntity } from './comment.entity';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ApiBearerAuth, ApiParam } from '@nestjs/swagger';
+import { GetUser } from '../common/get-user.decorator';
+import { UserEntity } from '../auth/user.entity';
 
 @Controller('comments')
 export class CommentsController {
@@ -23,7 +25,8 @@ export class CommentsController {
   createComment(
     @Body() commentDto: CommentDto,
     @GetPostId() postId: number,
+    @GetUser() user: UserEntity,
   ): Promise<CommentEntity> {
-    return this.commentsService.createComment(commentDto, postId);
+    return this.commentsService.createComment(commentDto, postId, user);
   }
 }

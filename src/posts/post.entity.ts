@@ -6,11 +6,13 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { CategoryEntity } from '../categories/category.entity';
 import { CommentEntity } from '../comments/comment.entity';
+import { UserEntity } from '../auth/user.entity';
 
 @Entity('post')
 export class PostEntity {
@@ -33,6 +35,9 @@ export class PostEntity {
 
   @OneToMany((type) => CommentEntity, (comment) => comment.post)
   comments: CommentEntity[];
+
+  @ManyToOne((type) => UserEntity, (user) => user.posts, { eager: true })
+  user: UserEntity;
 
   @AfterLoad()
   @AfterInsert()

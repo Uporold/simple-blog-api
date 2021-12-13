@@ -3,6 +3,7 @@ import { PostEntity } from './post.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PostDto } from './dto/post.dto';
+import { UserEntity } from '../auth/user.entity';
 
 @Injectable()
 export class PostsService {
@@ -29,12 +30,12 @@ export class PostsService {
     return res;
   }
 
-  async createPost(postDto: PostDto): Promise<PostEntity> {
+  async createPost(postDto: PostDto, user: UserEntity): Promise<PostEntity> {
     const { text, categoryNames } = postDto;
     const categories = categoryNames.map((categoryName) => ({
       name: categoryName,
     }));
-    const newPost = this.postRepository.create({ text, categories });
+    const newPost = this.postRepository.create({ text, categories, user });
     await this.postRepository.save(newPost);
     return newPost;
   }
